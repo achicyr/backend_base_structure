@@ -1,0 +1,22 @@
+#!/bin/bash
+
+case $1 in 
+	"g")
+		git clone git@github.com:achicyr/backend_base_structure.git backend
+		;;
+	"gstruct")
+		mkdir controllers models routes middlewares images
+		;;
+	"mrc")
+		cp ./_/controllers/draft.js ./controllers/${2}.js ; cp ./_/routes/draft.js ./routes/${2}.js ; cp ./_/models/Draft.js ./models/$(sed -r 's/(^|-)(\w)/\U\2/g' <<<"$2").js ;
+	       	sed -i "s/draft/${2}/gi" controllers/${2}.js ;   sed -i "s/Draft/$(sed -r 's/(^|-)(\w)/\U\2/g' <<<"$2")/gi" controllers/${2}.js ;   sed -i "s/draft/${2}/gi" routes/${2}.js ;   sed -i "s/Draft/$(sed -r 's/(^|-)(\w)/\U\2/g' <<<"$2")/gi" routes/${2}.js ;   sed -i "s/draft/${2}/gi" models/$(sed -r 's/(^|-)(\w)/\U\2/g' <<<"$2").js ;   sed -i "s/Draft/$(sed -r 's/(^|-)(\w)/\U\2/g' <<<"$2")/gi" models/$(sed -r 's/(^|-)(\w)/\U\2/g' <<<"$2").js ;
+		;;
+	"mrc_")
+		touch routes/${2}.js;touch controllers/${2}.js;touch models/${2}.js;
+		;;
+	*)
+		echo "non"
+esac
+
+
+

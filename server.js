@@ -1,5 +1,5 @@
-const http = require('http');
-const app = require('./app');
+const http = require('http')
+const app = require('./app')
 
 const normalizePort = val => {
   const port = parseInt(val, 10)
@@ -7,7 +7,7 @@ const normalizePort = val => {
   if (port >= 0)return port
   return false
 }
-const port = normalizePort(process.env.PORT || '3000')
+const port = normalizePort(process.env.PORT || '3000')
 app.set('port', port)
 
 const errorHandler = error => {
@@ -16,7 +16,7 @@ const errorHandler = error => {
   switch (error.code) {
     case 'EACCES':console.error(bind + ' requires elevated privileges.');process.exit(1);break;
     case 'EADDRINUSE':console.error(bind + ' is already in use.');process.exit(1);break;
-    default:throw error;
+    default:throw error
   }
 }
 
