@@ -1,5 +1,5 @@
 const fs = require('fs')
-const Draft = require('../models/DraftRecipe')
+const DraftModel = require('../models/DraftRecipe')
 
 , Utils = require('../middlewares/Utils.class')
 , _ = new Utils()
@@ -13,8 +13,8 @@ const Draft = require('../models/DraftRecipe')
 
 exports.createDraft = (req, res, next) => {
   console.log(req.body)
-  const drafObject = JSON.parse(req.body.draf)
-  const draf = new Draft({
+  const draftObject = JSON.parse(req.body.draf)
+  const draft = new DraftModel({
       ...draftObject
       , userId: req.auth.userId
       , imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
@@ -31,7 +31,7 @@ exports.createDraft = (req, res, next) => {
 /************************************************************************************************************ */
 
 exports.getAllDraft = (req, res, next) => {
-  Draft.find().then(
+  DraftModel.find().then(
     (drafts) => {
       res.status(200).json(drafts)
     }
@@ -45,7 +45,7 @@ exports.getAllDraft = (req, res, next) => {
 }
 exports.getOneDraft = (req, res, next) => {
   console.log('getOneDraft')
-  Draft.findOne({
+  DraftModel.findOne({
     _id: req.params.id
   }).then(
     (draft) => {
@@ -73,12 +73,12 @@ exports.modifyDraft = (req, res, next) => {
   } : { ...req.body }
 
   delete draftObject._userId
-  Draft.findOne({_id: req.params.id})
+  DraftModel.findOne({_id: req.params.id})
       .then((draft) => {
           if (draft.userId != req.auth.userId) {
               res.status(401).json({ message : 'Not authorized'})
           } else {
-              Draft.updateOne({ _id: req.params.id}, { ...draftObject, _id: req.params.id})
+              DraftModel.updateOne({ _id: req.params.id}, { ...draftObject, _id: req.params.id})
               .then(() => res.status(200).json({message : 'Objet modifié!'}))
               .catch(error => res.status(401).json({ error }))
           }
@@ -94,14 +94,14 @@ exports.modifyDraft = (req, res, next) => {
 /************************************************************************************************************ */
 
 exports.deleteDraft = (req, res, next) => {
-  Draft.findOne({ _id: req.params.id})
+  DraftModel.findOne({ _id: req.params.id})
       .then(draft => {
           if (draft.userId != req.auth.userId) {
               res.status(401).json({message: 'Not authorized'})
           } else {
               const filename = draft.imageUrl.split('/images/')[1]
               fs.unlink(`images/${filename}`, () => {
-                  Draft.deleteOne({_id: req.params.id})
+                  DraftModel.deleteOne({_id: req.params.id})
                       .then(() => { res.status(200).json({message: 'Objet supprimé !'})})
                       .catch(error => res.status(401).json({ error }))
               })
@@ -122,7 +122,7 @@ exports.likeDraft = (req, res, next) => {
   // console.log(req.body)
   // console.log(req.auth.userId)
 
-  Draft.findOne({
+  DraftModel.findOne({
     _id: req.params.id
   }).then(
     (draft) => {
@@ -158,7 +158,7 @@ exports.likeDraft = (req, res, next) => {
       console.log({ _id: req.params.id})
       console.log("req.params.id")
 
-      Draft.updateOne({ _id: req.params.id}, { ...({likes,dislikes,usersLiked,usersDisliked} = draft._doc)})
+      DraftModel.updateOne({ _id: req.params.id}, { ...({likes,dislikes,usersLiked,usersDisliked} = draft._doc)})
       .then(() => res.status(201).json({message : 'Vote pris en compte!'}))
       .catch(error => res.status(401).json({ error }))
 
@@ -207,8 +207,8 @@ exports.addMenu = (req, res, next) => {
   //TRAITER LES DONNÉES POUR POUVOIR LES INSÉRER AU BON ENDROIT DANS LE FICHIER MODEL Draft.js
   Draft.menus.carte = {...Draft.menus.carte, ...req.body}
   //LES ÉCRIRE DANS UN FICHIER
-  let buffer = new Buffer.from("const Draft = "+JSON.stringify(Draft));
-  fs.open("models/Draft.js", "w", function(err, fd) {
+  let buffer = new Buffer.from("const Draft = "+JSON.stringify(DraftModel));
+  fs.open("models/DraftModel.js", "w", function(err, fd) {
       if(err) {
           console.log('Cant open file');
       }else {
