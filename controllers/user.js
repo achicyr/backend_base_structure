@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt')
 , jwt = require('jsonwebtoken')
 , User = require('../models/User')
 
-, Utils = require('../middlewares/Utils.class')
+, _ = require('../middlewares/Utils.class')
 /************************************************************************************************************ */
 /************************************************************************************************************ */
 /************************************************************************************************************ */
@@ -60,9 +60,9 @@ exports.login = (req, res, next) => {
                             'RANDOM_TOKEN_SECRET',
                             { expiresIn: '24h' }
                         )
-                        // userId: user._id,
                         // ,liked: user.liked
                         // , role: user.role
+                        , userId: user._id
                         , ...user
                     })
                 })

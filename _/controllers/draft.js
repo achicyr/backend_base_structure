@@ -1,5 +1,5 @@
 const fs = require('fs')
-const DraftModel = require('../models/DraftRecipe')
+const DraftModel = require('../models/Draft')
 
 , Utils = require('../middlewares/Utils.class')
 , _ = new Utils()
