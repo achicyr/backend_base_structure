@@ -11,6 +11,7 @@ const DraftModel = require('../models/Draft')
 /************************************************************************************************************ */
 /************************************************************************************************************ */
 
+// necmCRUDcreate
 exports.createDraft = (req, res, next) => {
   console.log(req.body)
   const draftObject = JSON.parse(req.body.draf)
@@ -30,6 +31,7 @@ exports.createDraft = (req, res, next) => {
 /************************************************************************************************************ */
 /************************************************************************************************************ */
 
+// necmCRUDfindAll
 exports.getAllDraft = (req, res, next) => {
   DraftModel.find().then(
     (drafts) => {
@@ -43,6 +45,7 @@ exports.getAllDraft = (req, res, next) => {
     }
   )
 }
+// necmCRUDfindOne
 exports.getOneDraft = (req, res, next) => {
   console.log('getOneDraft')
   DraftModel.findOne({
@@ -66,6 +69,7 @@ exports.getOneDraft = (req, res, next) => {
 /************************************************************************************************************ */
 /************************************************************************************************************ */
 
+// necmCRUDfindOneUpdate
 exports.modifyDraft = (req, res, next) => {
   const draftObject = req.file ? {
       ...JSON.parse(req.body.draft),
@@ -93,6 +97,8 @@ exports.modifyDraft = (req, res, next) => {
 /************************************************************************************************************ */
 /************************************************************************************************************ */
 
+// necmCRUDfindOneDelete
+// necmCRUDfindOneDelete_FS
 exports.deleteDraft = (req, res, next) => {
   DraftModel.findOne({ _id: req.params.id})
       .then(draft => {
@@ -117,6 +123,7 @@ exports.deleteDraft = (req, res, next) => {
 /************************************************************************************************************ */
 /************************************************************************************************************ */
 
+// necmLikes
 exports.likeDraft = (req, res, next) => {
   console.log('likeDraft')
   // console.log(req.body)
@@ -177,55 +184,6 @@ exports.likeDraft = (req, res, next) => {
 /************************************************************************************************************ */
 /************************************************************************************************************ */
 
-/************************************************************************************************************ */
-/************************************************************************************************************ */
-/************************************************************************************************************ */
-/************************************************************************************************************ */
-exports.getAll = (req, res, next) => {
-  /*SNIPPET REQUEST BODY*/
-  // ner_body
-  /*SNIPPET MONGOOSE CRUD*/
-  // necmfind
-  /*SNIPPET express res*/
-  res.status(200).json(Data)
-  
-}
-
-exports.updateMenu = (req, res, next) => {
-  res.json({message: "le controlleur pour cette action ('update') n'a pas encore été codé"})
-}
-exports.deleteMenu = (req, res, next) => {
-  res.status(201).json({message: "le controlleur pour cette action ('delete') n'a pas encore été codé"})
-}
-exports.addMenu = (req, res, next) => {
-  console.log(req.body);
-
-  //RÉCUPÉRER DES DONNÉES AVANT DE LES SUPPRIMER, SI NÉCESSAIRE 
-  let nom_restau = Object.keys(req.body)[0]
-  , lieu_restau = Object.keys(req.body)[1]
-  delete req.body[lieu_restau]
-  //TRAITER LES DONNÉES POUR POUVOIR LES INSÉRER AU BON ENDROIT DANS LE FICHIER MODEL Draft.js
-  Draft.menus.carte = {...Draft.menus.carte, ...req.body}
-  //LES ÉCRIRE DANS UN FICHIER
-  let buffer = new Buffer.from("const Draft = "+JSON.stringify(DraftModel));
-  fs.open("models/DraftModel.js", "w", function(err, fd) {
-      if(err) {
-          console.log('Cant open file');
-      }else {
-          fs.write(fd, buffer, 0, buffer.length, 
-                  null, function(err,writtenbytes) {
-              if(err) {
-                  console.log('Cant write to file');
-              }else {
-                  console.log(writtenbytes +
-                      ' characters added to file');
-              }
-          })
-      }
-  })
-  //RENVOYER LA RÉPONSE
-  res.status(200).json({message:"Données créées avec succès"})
-}
 /************************************************************************************************************ */
 /************************************************************************************************************ */
 /************************************************************************************************************ */

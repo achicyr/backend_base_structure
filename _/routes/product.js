@@ -1,0 +1,20 @@
+const express = require('express')
+const router = express.Router()
+const auth = require('../middlewares/auth')
+const multer = require('../middlewares/multer')
+const productCtrl = require('../controllers/product')
+
+router.get('/', auth, productCtrl.getAllProduct)
+router.post('/', auth, multer, productCtrl.createProduct)
+router.get('/:id', auth, productCtrl.getOneProduct)
+router.put('/:id', auth, multer, productCtrl.modifyProduct)
+router.delete('/:id', auth, productCtrl.deleteProduct)
+// router.get('/:id/like', auth, productCtrl.likeProduct)
+// router.get('/:id/share', auth, productCtrl.shareProduct)
+// router.post('/:id/comment', auth, productCtrl.commentProduct)
+// router.post('/:id/buy', auth, postCtrl.buyProduct)
+// router.post('/:id/reserve', auth, postCtrl.reserveProduct)
+// router.post('/:id/bid', auth, postCtrl.bidProduct)
+// router.get('/:id/analytic', auth, postCtrl.analyticProduct)
+
+module.exports = router
