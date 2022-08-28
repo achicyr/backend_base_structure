@@ -13,7 +13,7 @@ exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
             const user = new User({
-                username: req.body.username,
+                email: req.body.email,
                 password: hash,
                 role: 0,
             })
@@ -41,7 +41,8 @@ exports.signup = (req, res, next) => {
 /************************************************************************************************************ */
 
 exports.login = (req, res, next) => {
-    User.findOne({ username: req.body.username || "" })
+    console.log(req.body);
+    User.findOne({ email: req.body.email || "" })
         .then(user => {
             console.log(user)
             if (!user) {
@@ -87,7 +88,7 @@ exports.logout = (req, res, next) => {
 
 exports.updateRole = (req, res, next) => {
     
-    User.findOne({username: req.params.id})
+    User.findOne({email: req.params.id})
         .then((user) => {
             // console.log(user)
             // console.log(req.body)

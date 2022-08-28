@@ -1,3 +1,4 @@
+const mongoose = require('mongoose')
 
 const commentSchema = mongoose.Schema({
     commentId: { type: String, required: true },
